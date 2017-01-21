@@ -126,6 +126,9 @@ namespace MovieDiary.Data.Migrations
                 {
                     b.Property<string>("Id");
 
+                    b.Property<string>("AboutMe")
+                        .HasAnnotation("MaxLength", 5000);
+
                     b.Property<int>("AccessFailedCount");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -135,6 +138,12 @@ namespace MovieDiary.Data.Migrations
                         .HasAnnotation("MaxLength", 256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName")
+                        .HasAnnotation("MaxLength", 50);
+
+                    b.Property<string>("LastName")
+                        .HasAnnotation("MaxLength", 100);
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -169,6 +178,56 @@ namespace MovieDiary.Data.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("MovieDiary.Models.List", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<string>("Name")
+                        .HasAnnotation("MaxLength", 100);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("ListsListofMovies");
+                });
+
+            modelBuilder.Entity("MovieDiary.Models.Movie", b =>
+                {
+                    b.Property<string>("Id");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("MovieDiary.Models.MovieInList", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ListId");
+
+                    b.Property<int>("MovieId");
+
+                    b.Property<string>("MovieId1");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
+
+                    b.HasIndex("MovieId1");
+
+                    b.ToTable("MoviesInLists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -206,6 +265,32 @@ namespace MovieDiary.Data.Migrations
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MovieDiary.Models.List", b =>
+                {
+                    b.HasOne("MovieDiary.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("MovieDiary.Models.Movie", b =>
+                {
+                    b.HasOne("MovieDiary.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("MovieDiary.Models.MovieInList", b =>
+                {
+                    b.HasOne("MovieDiary.Models.List", "List")
+                        .WithMany()
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MovieDiary.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId1");
                 });
         }
     }
