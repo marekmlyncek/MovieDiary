@@ -1,0 +1,113 @@
+﻿@model MovieDiary.Models.MovieViewModels.IndexViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+<div></div>
+<div class="container-fluid bacground-dark">
+    <div class="row">
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <a asp-action="Index" asp-controller="Movies">
+                            My Movies
+                        </a>
+                    </li>
+                    @foreach (var item in Model.MovieLists)
+                    {
+                        <li>
+                            <a asp-controller="Movies" asp-action="Index" asp-route-list="@item.Name">
+                                @item.Name
+                            </a>
+                        </li>
+                    }
+                    <li class="divider"></li>
+                    <li ><span class="glyphicon glyphicon-plus"></span></li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid ">
+                    <div class="row">
+                        <div class="col-md-offset-1 col-lg-offset-2">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-5 col-lg-4" id="poster-detail"><img class="img-thumbnail" src=""/>
+                                </div>
+                                <div class="col-sm-6 col-md-5 col-lg-4" id="movie-details"></div>
+                            </div>
+                            <div class="row">
+                                <form asp-action="Detail" asp-controller="Movies" method="post">
+                                    <div class="form-group sr-only">
+                                        <input id="movie-id" asp-for="Detail.Movie.Id" value="@Model.Detail.Movie.Id"/>
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-5 col-lg-4">
+                                        <input asp-for="Detail.Movie.Rating" class="rating rating-loading" data-size="xs" data-min="0" data-max="5" data-step="1">
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-5 col-lg-4">
+                                        <label class="checkbox-inline">
+                                            <input asp-for="Detail.Seen" type="checkbox" value="true">Seen
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input asp-for="Detail.WatchList" type="checkbox" value="true">Watch List
+                                        </label>
+                                        <label class="checkbox-inline"><input asp-for="Detail.Liked" type="checkbox" value="true">Like</label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-12 col-md-10 col-lg-8">
+                                            <label >Comment:</label>
+                                            <textarea asp-for="Detail.Movie.Memo" class="form-control" rows="5" id="comment"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-10 col-lg-8">
+                                        <button class="btn btn-primary" type="submit">Save</button>
+                                        <a asp-controller="Movies" asp-action="Delete" asp-route-id="@Model.Detail.Movie.Id" class="btn btn-danger">Delete</a>
+                                        <a asp-action="Index" asp-controller="Movies" class="btn btn-default pull-right">Cancel</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "https://api.themoviedb.org/3/movie/"+ $("#movie-id").val() + "?api_key=f8f661c81ae1fb3899160a8b16245b63",
+                success: function(respone) {
+                    $("#poster-detail").html("<img src='https://image.tmdb.org/t/p/w780"+ respone.poster_path+"' " +
+                        "class='img-thumbnail' alt='" +
+                        respone.title +"-poster"+
+                        "'" +
+                        "/>");
+
+                    $("#movie-details").html(
+                        "<h3>"+respone.title+"</h3>" +
+                        "<p>"+respone.overview+"</p>" +
+                        "<span><h4>Average Rating: "+respone.vote_average+"</h4></span>" +
+                        "<span>Release Date: "+respone.release_date+"</span><br>" +
+                        "<span id='genres-list'></span>"
+                    );
+                    var text = "";
+                    $.each(respone.genres,
+                        function(index, item) {
+                            text = text + item.name;
+                            text = text + ", ";
+                        });
+                    $("#genres-list").html("Genres: "+text);
+                }
+            });
+        });
+    </script>
+}

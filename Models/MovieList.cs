@@ -2,7 +2,7 @@
 
 namespace MovieDiary.Models
 {
-    public class List
+    public class MovieList
     {
         public int Id { get; set; }
 

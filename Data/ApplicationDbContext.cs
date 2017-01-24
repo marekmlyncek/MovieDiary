@@ -24,7 +24,7 @@ namespace MovieDiary.Data
         }
 
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<List> ListsListofMovies { get; set; }
-        public DbSet<MovieInList> MoviesInLists { get; set; }
+        public DbSet<MovieList> MovieLists { get; set; }
+        public DbSet<MovieInMovieList> MoviesInMovieLists { get; set; }
     }
 }

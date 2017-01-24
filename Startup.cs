@@ -48,7 +48,7 @@ namespace MovieDiary
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
-
+            services.AddScoped<IMovieDiaryRepository, DatabaseMovieDiaryRepository>();
 
         }
 

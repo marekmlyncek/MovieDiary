@@ -24,9 +24,43 @@ namespace MovieDiary.Controllers
 
 
         [HttpGet]
-        public IActionResult Customers()
+        public async Task<IActionResult> Customers()
         {
-            return View();
+//            return View();
+            var role = await _roleManager.FindByNameAsync("Admin");
+            var models = new List<UserTableData>();
+            var users = _movieDiaryRepository.GetUsers();
+            foreach (var user in users)
+            {
+                var model = new UserTableData()
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.FirstName + " " + user.LastName,
+                    Phone = user.PhoneNumber
+                };
+                if (user.Roles.FirstOrDefault(c => c.RoleId == role.Id) != null)
+                {
+                    if (user.Email != "admin@moviediary.com")
+                    {
+                        model.Admin = 1;
+                        model.Delete = 1;
+                    }
+                    else
+                    {
+                        model.Admin = 0;
+                        model.Delete = 0;
+                    }
+                }
+                else
+                {
+                    model.Admin = 2;
+                    model.Delete = 1;
+                }
+                models.Add(model);
+
+            }
+            return View(models);
         }
 
         [HttpGet]

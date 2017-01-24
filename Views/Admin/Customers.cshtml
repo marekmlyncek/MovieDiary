@@ -1,41 +1,53 @@
-﻿﻿@using System.Linq
+﻿@using System.Linq
+@using MovieDiary.Models.AdminViewModel
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@model System.Collections.Generic.List<MovieDiary.Models.AdminViewModel.UserTableData>
+
 @{
     ViewData["Title"] = "Users";
 }
+<div class="container bacground-dark">
+    <h1>Users</h1>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12">
+            <table class="table table-bordered table-striped responsive nowrap" width="100%"  id="Customers">
+                <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Admin</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                @*    @foreach (var user in Model)*@
+                @*    {*@
+                @*        <tr>*@
+                @*        <td>@user.Email</td>*@
+                @*        <td>@user.Name</td>*@
+                @*        <td>@user.Phone</td>*@
+                @*        <td>@user.Admin</td>*@
+                @*        <td>*@
+                @*            <button class='btn-link js-delete' data-user-id='4712d432-e41a-41f9-9f10-932098acc08e'><span class='glyphicon glyphicon-trash'></span><span>Delete</span></button>*@
+                @*        </td>*@
+                @*        </tr>*@
+                @*    }*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<h1>Users</h1>
-<hr/>
-
-<table class="table table-bordered table-hover" id="Customers">
-  <thead>
-  <tr>
-    <th>Email</th>
-    <th>Name</th>
-    <th>Phone Number</th>
-    <th>Admin</th>
-    <th>Delete</th>
-  </tr>
-  </thead>
-@*  <tr>*@
-@*    <td></td>*@
-@*    <td></td>*@
-@*    <td></td>*@
-@*    <td></td>*@
-@*    <td>*@
-@*      <button class='btn-link js-delete' data-user-id='4712d432-e41a-41f9-9f10-932098acc08e'><span class='glyphicon glyphicon-trash'></span><span>Delete</span></button>*@
-@*    </td>*@
-@*  </tr>*@
-  <tbody>
-  </tbody>
-</table>
 
 @section scripts
 {
 <script>
     $(document).ready(function() {
         var table = $("#Customers").DataTable({
+            responsive: true,
             ajax: {
                 url:"/Admin/GetCustomers",
                 dataSrc:""

@@ -1,0 +1,82 @@
+﻿@using System.Linq
+@model MovieDiary.Models.MovieViewModels.IndexViewModel
+@{
+    ViewBag.Title = "My Movies";
+}
+
+<div class="container-fluid bacground-dark">
+    <div class="row">
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <a asp-action="Index" asp-controller="Movies">
+                            My Movies
+                        </a>
+                    </li>
+                    @foreach (var item in Model.MovieLists)
+                    {
+                        <li>
+                            <a asp-controller="Movies" asp-action="Index" asp-route-list="@item.Name">
+                                @item.Name
+                            </a>
+                        </li>
+                    }
+                    <li class="divider"></li>
+                    <li >
+                        <a >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid ">
+                    <div class="row">
+                        @if (!Model.Movies.Any())
+                        {
+                            <h2 class="text-center">You dont have any Saved Movies.</h2>
+                        }
+                        else
+                        {
+                            foreach (var item in Model.Movies)
+                            {
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 movie-thubnails">
+                                    <span class="id-holder sr-only">@item.Id</span>
+                                </div>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(".id-holder").each(function(index, item) {
+            $.ajax({
+                url: "https://api.themoviedb.org/3/movie/"+ $(item).text() + "?api_key=f8f661c81ae1fb3899160a8b16245b63",
+                success: function(respone) {
+                    $(item).parent().append("" +
+                        "<div class='thumbnail'>" +
+                        "<a href='/movies/detail/" + $(item).text()+"'>" +
+                        "<img src='https://image.tmdb.org/t/p/w780"+ respone.poster_path+"' alt='" + respone.title +"-poster'/> " +
+                        "<div class='caption'><h4>" +respone.title +"</h4>" +
+                        "</div>" +
+                        "</a>" +
+                        "</div>" +
+                        "");
+                }
+            });
+        });
+    </script>
+}

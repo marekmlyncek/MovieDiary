@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="full">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,17 +8,23 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/datatables.net-responsive-dt/css/responsive.dataTables.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap-star-rating/css/star-rating.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+        <link rel="stylesheet" href="~/lib/bootstrap-star-rating/css/star-rating.min.css" />
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/datatables.net-bs/css/dataTables.bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css" />
     </environment>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+    <div id="myNavbar" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -29,29 +35,40 @@
                 <a asp-controller="Home" asp-action="Index" class="navbar-brand">MovieDiary</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
+
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - MovieDiary</p>
-        </footer>
-    </div>
+
+    @RenderBody()
+
+
+
+        <div class="bottom navbar-fixed-bottom">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="navbar-text col-xs-12">&copy; 2016 - MovieDiary</div>
+                </div>
+            </div>
+        </div>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+        <script src="~/lib/datatables.net-responsive/js/dataTables.responsive.js"></script>
+        <script src="~/lib/bootbox.js/bootbox.js"></script>
+        <script src="~/lib/bootstrap-star-rating/js/star-rating.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/bootbox.js/bootbox.js"></script>
+        <script src="~/lib/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="~/lib/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/lib/bootstrap-star-rating/js/star-rating.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
@@ -63,6 +80,27 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-    @RenderSection("scripts", required: false)
+@RenderSection("scripts", required: false)
+
+<!-- Modal -->
+<div class="modal" id="modalLogOut">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-log-out"></span>Log Out</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you Realy want to LogOut?</p>
+            </div>
+            <div class="modal-footer">
+                <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Log Out</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

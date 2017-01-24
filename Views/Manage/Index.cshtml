@@ -1,0 +1,56 @@
+﻿@using System
+@model ManageViewModel
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewBag.Title = "Manage Account";
+}
+<div class="row">
+    <div class="col-xs-1 col-sm-2 col-md-3 col-lg-4"></div>
+    <div class="col-xs-10 col-sm-8 col-md-6 col-lg-4">
+        @if (String.IsNullOrEmpty(Model.FirstName))
+        {
+            <h2>@UserManager.GetUserName(User)</h2>
+        }
+        else
+        {
+            <h2>@Model.FirstName&nbsp;@Model.LastName</h2>
+        }
+
+
+        <hr/>
+        <form class="form-horizontal" Method="post" asp-controller="Manage" asp-action="Index">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="  control-label"></label>
+                <div class="">
+                    <input asp-for="FirstName" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class=" control-label"></label>
+                <div class="">
+                    <input asp-for="LastName" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <div class="">
+                    <input asp-for="PhoneNumber" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="AboutMe" class="control-label"></label>
+                <div class="">
+                    <textarea asp-for="AboutMe" rows="2"class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="">
+                    <button type="submit" class="col-xs-6 btn btn-primary">Save</button>
+                    <a asp-controller="Movies" asp-action="Index" class="col-xs-6 btn btn-default">Cancel</a>
+                </div>
+                <div class=""></div>
+            </div>
+        </form>
+    </div>
+</div>

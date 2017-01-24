@@ -5,6 +5,11 @@
     "bootstrap": "3.3.6",
     "jquery": "2.2.3",
     "jquery-validation": "1.15.0",
-    "jquery-validation-unobtrusive": "3.2.6"
+    "jquery-validation-unobtrusive": "3.2.6",
+    "datatables.net": "^2.1.1",
+    "datatables.net-bs": "^2.1.1",
+    "datatables.net-responsive": "^2.1.1",
+    "datatables.net-responsive-dt": "^2.1.1",
+    "bootbox.js": "bootbox#^4.4.0"
   }
 }

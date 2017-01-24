@@ -1,42 +1,150 @@
+@using System.Linq
 @model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
+    if (Model == null)
+    {
+        <div id="first-time-show" class="sr-only">1</div>
+    }
+    else
+    {
+        <div id="first-time-show" class="sr-only">0</div>
+    }
 }
 
-<h2>@ViewData["Title"].</h2>
 
-<form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-    <h4>Create a new account.</h4>
-    <hr />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Email" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+<div class="row ">
+    <div class="col-sm-2 col-md-3 col-lg-4"></div>
+    <div class="col-sm-8 col-md-6 col-lg-4">
+        <h2>@ViewData["Title"].</h2>
+        <hr/>
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <div id="alert-register-valid"class="alert alert-danger  fade in">
+                <div id="register-valid-text"asp-validation-summary="All"></div>
+            </div>
+            <div class="input-group" id="input-email-register">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input id="email-input" asp-for="Email" type="text" class="form-control" name="email" placeholder="Email">
+            </div>
+            <div class="input-group" id="input-passwd">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input id="valid-passwd" asp-for="Password" class="form-control" placeholder="Password" />
+            </div>
+            <div class="input-group " id="input-passwd-confirm">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-repeat"></i></span>
+                <input  id="valid-confirm-passwd" asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+            </div>
+
+            <div class="form-group">
+                <button id="submit-btn-register"type="submit" class="btn btn-primary col-xs-12">Register</button>
+            </div>
+
+        </form>
+
     </div>
-    <div class="form-group">
-        <label asp-for="Password" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="ConfirmPassword" class="form-control" />
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-default">Register</button>
-        </div>
-    </div>
-</form>
+    <div class=" col-sm-2 col-md-3 col-lg-4"></div>
+
+</div>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(document).ready(function() {
+            if ($("#register-valid-text").hasClass("validation-summary-valid")) {
+                $("#alert-register-valid").addClass("sr-only");
+            }
+
+            if ($("#first-time-show").html() == "0") {
+                if ($("#email-input").hasClass("input-validation-error")) {
+                    $("#input-email-register").removeClass("has-success has-feedback");
+                    $("#input-email-register").addClass("has-error has-feedback");
+                } else {
+                    $("#input-email-register").removeClass("has-error has-feedback");
+                    $("#input-email-register").addClass("has-success has-feedback");
+
+                    if ($("#valid-passwd").hasClass("input-validation-error")) {
+                        $("#input-passwd").removeClass("has-success has-feedback");
+                        $("#input-passwd").addClass("has-error has-feedback");
+                    } else {
+                        $("#input-passwd").removeClass("has-error has-feedback");
+                        $("#input-passwd").addClass("has-success has-feedback");
+
+                        if ($("#valid-confirm-passwd").hasClass("input-validation-error")) {
+                            $("#input-passwd-confirm").removeClass("has-success has-feedback");
+                            $("#input-passwd-confirm").addClass("has-error has-feedback");
+                        } else {
+                            $("#input-passwd-confirm").removeClass("has-error has-feedback");
+                            $("#input-passwd-confirm").addClass("has-success has-feedback");
+                        }
+                    }
+                }
+            } else {
+                $("#alert-register-valid").addClass("sr-only");
+            }
+
+
+
+//            if ($("#register-valid-text").hasClass("validation-summary-valid")) {
+//                $("#alert-register-valid").addClass("sr-only");
+//            }
+//            if ($("#email-input").hasClass("input-validation-error")) {
+//                $("#input-email-register").addClass("has-error has-feedback");
+//            } else {
+//                $("#input-email-register").removeClass("has-error has-feedback");
+//                if ($("#email-input").hasClass("valid")) {
+//                    $("#input-email-register").addClass("has-success has-feedback");
+//                }
+//            }
+//
+//            if ($("#valid-passwd").hasClass("input-validation-error")) {
+//                $("#input-passwd").addClass("has-error has-feedback");
+//            } else {
+//                $("#input-passwd").removeClass("has-error has-feedback");
+//                if ($("#valid-passwd").hasClass("valid")) {
+//                    $("#input-passwd").addClass("has-success has-feedback");
+//                }
+//            }
+//
+//            if ($("#valid-confirm-passwd").hasClass("input-validation-error")) {
+//                $("#input-passwd-confirm").addClass("has-error has-feedback");
+//            } else {
+//                $("#input-passwd-confirm").removeClass("has-error has-feedback");
+//                if ($("#valid-confirm-passwd").hasClass("input-validation-error")) {
+//                    $("#input-passwd-confirm").addClass("has-success has-feedback");
+//                }
+//            }
+//
+//            $("#submit-btn-register").on("click",
+//                function() {
+//                    if ($("#register-valid-text").hasClass("validation-summary-errors")) {
+//                        $("#alert-register-valid").removeClass("sr-only");
+//
+//                    }
+//
+//                    if ($("#email-input").hasClass("input-validation-error")) {
+//                        $("#input-email-register").removeClass("has-success has-feedback");
+//                        $("#input-email-register").addClass("has-error has-feedback");
+//                    } else {
+//                        $("#input-email-register").removeClass("has-error has-feedback");
+//                        $("#input-email-register").addClass("has-success has-feedback");
+//
+//                        if ($("#valid-passwd").hasClass("input-validation-error")) {
+//                            $("#input-passwd").removeClass("has-success has-feedback");
+//                            $("#input-passwd").addClass("has-error has-feedback");
+//                        } else {
+//                            $("#input-passwd").removeClass("has-error has-feedback");
+//                            $("#input-passwd").addClass("has-success has-feedback");
+//
+//                            if ($("#valid-confirm-passwd").hasClass("input-validation-error")) {
+//                                $("#input-passwd-confirm").removeClass("has-success has-feedback");
+//                                $("#input-passwd-confirm").addClass("has-error has-feedback");
+//                            } else {
+//                                $("#input-passwd-confirm").removeClass("has-error has-feedback");
+//                                $("#input-passwd-confirm").addClass("has-success has-feedback");
+//                            }
+//                        }
+//                    }
+
+
+            });
+    </script>
 }

@@ -1,3 +1,4 @@
+@using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
 @using MovieDiary.Models
 
@@ -6,21 +7,48 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
-            </li>
-        </ul>
-    </form>
+
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                @UserManager.GetUserName(User)
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a asp-action="index" asp-controller="Manage"><span class="glyphicon glyphicon-user"></span> Your Profile</a></li>
+                @{
+                    var user = await UserManager.GetUserAsync(User);
+                    if (await UserManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        <li><a asp-action="Customers" asp-controller="Admin"><span class="glyphicon glyphicon-cog"></span> Users</a></li>
+                    }
+                }
+                <li>
+                    <a id="logof" href="#" data-toggle="modal" data-target="#modalLogOut"><span class="glyphicon glyphicon-log-out"></span> Log off</a>
+                </li>
+            </ul>
+        </li>
+
+    </ul>
+
+
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
+        <li><a asp-controller="Account" asp-action="Register"><span class="glyphicon glyphicon-user"></span>Register</a></li>
+        <li><a asp-controller="Account" asp-action="Login"><span class="glyphicon glyphicon-log-in"></span>Log in</a></li>
     </ul>
 }
+
+<div class="navbar-form navbar-right">
+    <div class="form-group form-group-sm">
+        <input type="text" placeholder="Search Movies" id="search-movie" class="form-control" onkeyup="searchMovies();"/>
+    </div>
+    <span class="dropdown" id="dropdown-holder">
+        <a href="#" class="btn btn-default btn-sm dropdown-toggle sr-only" data-toggle="dropdown"><span class="glyphicon glyphicon-search"></span></a>
+        <ul class="dropdown-menu-left dropdown-menu " id="search-result-dropdown">
+
+        </ul>
+    </span>
+</div>

@@ -63,14 +63,20 @@ namespace MovieDiary.Controllers
                 if (result.Succeeded)
                 {
                     ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+
+
+                    //Temp Code
 //                    var adminRole = new IdentityRole("Admin");
 //                    await _roleManager.CreateAsync(adminRole);
 //                    await _userManager.AddToRoleAsync(user, "Admin");
+                    //End Temp code
+
+
                     if (await _userManager.IsInRoleAsync(user, "Admin"))
                     {
                         return RedirectToAction(nameof(AdminController.Customers), "Admin");
                     }
-                    return RedirectToAction(nameof(MoviesController.Seen), "Movies"); //
+                    return RedirectToAction(nameof(HomeController.Index), "Home"); //
                 }
                 else
                 {
@@ -105,11 +111,11 @@ namespace MovieDiary.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-
+                    _movieDiaryRepository.CreteUserLists(user.Id);
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
 //                    ApplicationUser user = await _userManager.GetUserAsync(User);
-                    return RedirectToAction(nameof(MoviesController.Seen), "Movies");
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
                 AddErrors(result);
             }
@@ -127,36 +133,6 @@ namespace MovieDiary.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(HomeController.Index), "home");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Manage()
-        {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            ManageViewModel model = new ManageViewModel();
-            model.FirstName = user.FirstName;
-            model.LastName = user.LastName;
-            model.AboutMe = user.AboutMe;
-            model.PhoneNumber = user.PhoneNumber;
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async  Task<IActionResult> Manage(ManageViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                user.LastName = model.LastName;
-                user.FirstName = model.FirstName;
-                user.AboutMe = model.AboutMe;
-                user.PhoneNumber = model.PhoneNumber;
-                await _userManager.UpdateAsync(user);
-
-                return View(model);
-            }
-            return View(model);
         }
 
         [HttpPost]
